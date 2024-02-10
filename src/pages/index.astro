@@ -1,13 +1,44 @@
 ---
 import HTML from '../layouts/HTML.astro';
-import { links } from '../data/links';
+import apolloClient from '../../lib/apolloClient';
+import gql from 'graphql-tag';
+import type { Link } from '@prisma/client';
+
+const AllLinksQuery = gql`
+  query {
+    links {
+      id
+      title
+      url
+      description
+      imageUrl
+      category
+    }
+  }
+`;
+const AllUsersQuery = gql`
+  query {
+    users {
+      id
+      role
+    }
+  }
+`;
+
+const { data } = await apolloClient.query({
+  query: AllLinksQuery,
+});
+
+const { data: users } = await apolloClient.query({ query: AllUsersQuery });
+
+console.log(users);
 ---
 
 <HTML>
   <div class="container mx-auto max-w-5xl my-20">
     <ul class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
       {
-        links.map((link) => (
+        data.links.map((link: Link) => (
           <li class="shadow  max-w-md  rounded">
             <img class="shadow-sm" src={link.imageUrl} />
             <div class="p-5 flex flex-col space-y-2">

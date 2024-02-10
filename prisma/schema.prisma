@@ -3,7 +3,13 @@
 
 generator client {
   provider = "prisma-client-js"
+  
+  // For NETLIFY EDGE Fn 
   binaryTargets = ["native", "rhel-openssl-1.0.x"]
+}
+
+generator pothos {
+  provider = "prisma-pothos-types"
 }
 
 datasource db {
