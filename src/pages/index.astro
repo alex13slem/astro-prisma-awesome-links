@@ -16,22 +16,18 @@ const AllLinksQuery = gql`
     }
   }
 `;
-const AllUsersQuery = gql`
-  query {
-    users {
-      id
-      role
-    }
-  }
-`;
+// const AllUsersQuery = gql`
+//   query {
+//     users {
+//       id
+//       role
+//     }
+//   }
+// `;
 
 const { data } = await apolloClient.query({
   query: AllLinksQuery,
 });
-
-const { data: users } = await apolloClient.query({ query: AllUsersQuery });
-
-console.log(users);
 ---
 
 <HTML>
