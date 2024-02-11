@@ -1,10 +1,8 @@
 ---
 import HTML from '../layouts/HTML.astro';
-// import apolloClient from '../lib/apolloClient';
-import gql from 'graphql-tag';
 import type { Link } from '@prisma/client';
-import { links } from '../data/links';
-import { initializeApollo } from '../lib/apolloClient';
+import { gql } from '@urql/core';
+import urqlClient from '../lib/urqlClient';
 
 const AllLinksQuery = gql`
   query {
@@ -18,19 +16,8 @@ const AllLinksQuery = gql`
     }
   }
 `;
-// const AllUsersQuery = gql`
-//   query {
-//     users {
-//       id
-//       role
-//     }
-//   }
-// `;
 
-const apolloClient = initializeApollo();
-const { data } = await apolloClient.query({
-  query: AllLinksQuery,
-});
+const { data } = await urqlClient.query(AllLinksQuery, {});
 ---
 
 <HTML>
