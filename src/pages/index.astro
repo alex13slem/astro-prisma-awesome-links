@@ -2,7 +2,7 @@
 import HTML from '../layouts/HTML.astro';
 import type { Link } from '@prisma/client';
 import { gql } from '@urql/core';
-import { Client, fetchExchange, ssrExchange } from '@urql/core';
+import urqlClient from '../lib/urqlClient';
 
 const AllLinksQuery = gql`
   query {
@@ -16,30 +16,13 @@ const AllLinksQuery = gql`
     }
   }
 `;
-const url =
-  (import.meta.env.DEV ? 'http://localhost:8888/' : import.meta.env.SITE) +
-  'api/graphql';
 
-const urqlClient = new Client({
-  url,
-  exchanges: [
-    ssrExchange({
-      isClient: false,
-      staleWhileRevalidate: true,
-    }),
-    fetchExchange,
-  ],
-});
 const { data, error } = await urqlClient
   .query(AllLinksQuery, {}, {})
   .toPromise();
-
 error && console.error(error);
-console.log('data', data);
 
 const links: Link[] | null = data?.links;
-console.log('url', url);
-console.log('links', links);
 ---
 
 <HTML>
