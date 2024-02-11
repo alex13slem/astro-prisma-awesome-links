@@ -6,7 +6,7 @@ import {
 import merge from 'deepmerge';
 import { isEqual } from 'lodash-es';
 
-const uri = import.meta.env.URL + '/api/graphql';
+const uri = import.meta.env.SITE + '/api/graphql';
 export const APOLLO_STATE_PROP_NAME = '__APOLLO_STATE__';
 
 let apolloClient: ApolloClient<NormalizedCacheObject> | null;
