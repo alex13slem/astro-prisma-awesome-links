@@ -1,8 +1,3 @@
 {
-  "extends": "astro/tsconfigs/strict",
-  "ts-node": {
-    "compilerOptions": {
-      "module": "CommonJS"
-    }
-  }
+  "extends": "astro/tsconfigs/strict"
 }

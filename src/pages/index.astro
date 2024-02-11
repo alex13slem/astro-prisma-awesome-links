@@ -1,8 +1,10 @@
 ---
 import HTML from '../layouts/HTML.astro';
-import apolloClient from '../lib/apolloClient';
+// import apolloClient from '../lib/apolloClient';
 import gql from 'graphql-tag';
 import type { Link } from '@prisma/client';
+import { links } from '../data/links';
+import { initializeApollo } from '../lib/apolloClient';
 
 const AllLinksQuery = gql`
   query {
@@ -25,6 +27,7 @@ const AllLinksQuery = gql`
 //   }
 // `;
 
+const apolloClient = initializeApollo();
 const { data } = await apolloClient.query({
   query: AllLinksQuery,
 });

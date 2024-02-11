@@ -1,27 +1,59 @@
-import { ApolloClient, InMemoryCache } from '@apollo/client/core';
+import {
+  ApolloClient,
+  InMemoryCache,
+  type NormalizedCacheObject,
+} from '@apollo/client/core';
+import merge from 'deepmerge';
+import { isEqual } from 'lodash-es';
 
-// const apolloClient = new ApolloClient({
-//   uri: (import.meta.env.URL || '') + '/api/graphql',
-//   cache: new InMemoryCache(),
-//   ssrMode: true,
-// });
+const uri = import.meta.env.URL + '/api/graphql';
+export const APOLLO_STATE_PROP_NAME = '__APOLLO_STATE__';
 
-// export default apolloClient;
+let apolloClient: ApolloClient<NormalizedCacheObject> | null;
 
-const apolloClientSingleton = () =>
-  new ApolloClient({
-    uri: (import.meta.env.URL || '') + '/api/graphql',
+function createApolloClient() {
+  return new ApolloClient({
+    ssrMode: typeof window === 'undefined',
+    uri,
     cache: new InMemoryCache(),
-    ssrMode: true,
   });
-
-declare global {
-  var apolloClient: undefined | ReturnType<typeof apolloClientSingleton>;
 }
 
-const apolloClient = globalThis.apolloClient || apolloClientSingleton();
+export function initializeApollo(initialState?: any) {
+  const _apolloClient = apolloClient ?? createApolloClient();
 
-if (process.env.NODE_ENV !== 'production')
-  globalThis.apolloClient = apolloClient;
+  if (initialState) {
+    const existingCache = _apolloClient.cache.extract();
 
-export default apolloClient;
+    const data = merge(initialState, existingCache, {
+      arrayMerge: (destinationArray, sourceArray) => [
+        ...sourceArray,
+        ...destinationArray.filter((d) =>
+          sourceArray.every((s) => !isEqual(d, s))
+        ),
+      ],
+    });
+    _apolloClient.cache.restore(data);
+  }
+
+  if (typeof window === 'undefined') {
+    return _apolloClient;
+  }
+
+  if (!apolloClient) {
+    apolloClient = _apolloClient;
+  }
+
+  return _apolloClient;
+}
+
+export function addApolloState(
+  client: ApolloClient<NormalizedCacheObject>,
+  pageProps: any
+) {
+  if (pageProps?.props) {
+    pageProps.props[APOLLO_STATE_PROP_NAME] = client.cache.extract();
+  }
+
+  return pageProps;
+}
