@@ -2,7 +2,7 @@
 import HTML from '../layouts/HTML.astro';
 import type { Link } from '@prisma/client';
 import { gql } from '@urql/core';
-import { Client, fetchExchange } from '@urql/core';
+import { Client, fetchExchange, ssrExchange } from '@urql/core';
 
 const AllLinksQuery = gql`
   query {
@@ -22,11 +22,18 @@ const url =
 
 const urqlClient = new Client({
   url,
-  exchanges: [fetchExchange],
+  exchanges: [
+    ssrExchange({
+      isClient: false,
+      staleWhileRevalidate: true,
+    }),
+    fetchExchange,
+  ],
 });
 const { data, error } = await urqlClient
   .query(AllLinksQuery, {}, {})
   .toPromise();
+
 error && console.error(error);
 console.log('data', data);
 
