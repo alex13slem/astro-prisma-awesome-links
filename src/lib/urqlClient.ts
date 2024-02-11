@@ -1,9 +1,9 @@
 import { Client, cacheExchange, fetchExchange } from '@urql/core';
 
-const url = import.meta.env.SITE + '/api/graphql';
-// const url =
-//   (import.meta.env.DEV ? 'http://localhost:8888' : import.meta.env.SITE) +
-//   '/api/graphql';
+// const url = import.meta.env.SITE + '/api/graphql';
+const url =
+  (import.meta.env.DEV ? 'http://localhost:8888' : import.meta.env.SITE) +
+  '/api/graphql';
 
 declare global {
   var urqlClient: undefined | Client;
