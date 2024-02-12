@@ -1,8 +1,10 @@
 <script lang="ts">
   import type { Link } from '@prisma/client';
   import { gql } from '@urql/core';
-  import urqlClient, { type Page } from '../lib/urqlClient';
+  import urqlClient, { isClient } from '../lib/urqlClient';
+  import type { Page } from '../types/graphql';
   import { onMount } from 'svelte';
+  import { crossfade, fade, scale } from 'svelte/transition';
 
   const AllLinksQuery = gql`
     query allLinksQuery($first: Int, $after: ID) {
@@ -36,12 +38,12 @@
     try {
       cardLoad = true;
       const { data } = await urqlClient
-        .query(AllLinksQuery, { first: limit, after })
+        .query(AllLinksQuery, { first: limit })
         .toPromise();
 
       links = data.links;
       hasNext = links?.pageInfo.hasNextPage || false;
-      after = links?.pageInfo.endCursor || null;
+      // after = links?.pageInfo.endCursor || null;
     } catch (error) {
       console.error(error);
     } finally {
@@ -52,14 +54,16 @@
   onMount(async () => {
     await loadCard();
   });
+
+  $: if (limit) loadCard();
 </script>
 
 <ul class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
   {#if !links}
     Load...
   {:else}
-    {#each links.edges as { node: link }}
-      <li class="shadow max-w-md rounded">
+    {#each links.edges as { node: link } (link.id)}
+      <li class="shadow max-w-md rounded" transition:scale>
         <img class="shadow-sm" src={link.imageUrl} alt="" />
         <div class="p-5 flex flex-col space-y-2">
           <p class="text-sm text-blue-500">{link.category}</p>
@@ -84,7 +88,13 @@
         </div>
       </li>
     {/each}
-    <button on:click={loadCard} disabled={!hasNext}>
+    <button
+      on:click={() => {
+        limit += 3;
+        // loadCard();
+      }}
+      disabled={!hasNext}
+    >
       {#if cardLoad}
         Card Load...
       {:else if !hasNext}
