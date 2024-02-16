@@ -1,5 +1,5 @@
 import type { EdgeFunction } from '@netlify/edge-functions';
-import { supabase } from '../../../src/lib/supabaseClient';
+import { supabase } from '../../src/lib/supabaseClient';
 
 const handler: EdgeFunction = async (request, ctx) => {
   if (request.method !== 'POST') {

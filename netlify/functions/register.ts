@@ -1,5 +1,5 @@
 import type { EdgeFunction } from '@netlify/edge-functions';
-import { supabase } from '../../../src/lib/supabaseClient';
+import { supabase } from '../../src/lib/supabaseClient';
 
 const handler: EdgeFunction = async (request, ctx) => {
   if (request.method !== 'POST') {
@@ -22,7 +22,7 @@ const handler: EdgeFunction = async (request, ctx) => {
     return new Response(error.message, { status: 500 });
   }
 
-  const url = new URL('/signin', request.url);
+  const url = new URL('/admin/signin', request.url);
 
   return Response.redirect(url);
 };
