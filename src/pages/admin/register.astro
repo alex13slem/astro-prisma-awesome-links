@@ -1,0 +1,21 @@
+---
+import HTML from '../../layouts/HTML.astro';
+---
+
+<HTML>
+  <div class="container mx-auto max-w-5xl my-20">
+    <h1>Register</h1>
+    <p>Already have an account? <a href="/admin/signin">Sign in</a></p>
+    <form action="/api/auth/register" method="post">
+      <label>
+        Email
+        <input type="email" name="email" placeholder="Email" />
+      </label>
+      <label>
+        Password
+        <input type="password" name="password" placeholder="Password" />
+      </label>
+      <button type="submit">Login</button>
+    </form>
+  </div>
+</HTML>

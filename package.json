@@ -11,26 +11,32 @@
   },
   "dependencies": {
     "@astrojs/check": "^0.4.1",
+    "@astrojs/netlify": "^5.1.2",
     "@astrojs/svelte": "^5.0.3",
     "@astrojs/tailwind": "^5.1.0",
+    "@netlify/edge-functions": "^2.3.1",
     "@netlify/functions": "^2.5.1",
     "@pothos/core": "^3.41.0",
     "@pothos/plugin-prisma": "^3.63.1",
     "@pothos/plugin-relay": "^3.46.0",
     "@prisma/client": "^5.9.1",
     "@prisma/extension-accelerate": "^0.6.3",
+    "@supabase/supabase-js": "^2.39.6",
     "@tailwindcss/forms": "^0.5.7",
     "@tailwindcss/typography": "^0.5.10",
     "@urql/core": "^4.2.3",
     "astro": "^4.3.5",
     "graphql": "^16.8.1",
     "graphql-yoga": "^5.1.1",
+    "netlify-identity-widget": "^1.9.2",
     "svelte": "^4.2.10",
+    "svelte-routing": "^2.12.0",
     "tailwindcss": "^3.4.1",
     "tsx": "^4.7.0",
     "typescript": "^5.3.3"
   },
   "devDependencies": {
+    "@types/netlify-identity-widget": "^1.9.6",
     "prisma": "^5.9.1"
   },
   "prisma": {
