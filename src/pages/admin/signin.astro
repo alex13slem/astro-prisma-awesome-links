@@ -1,5 +1,6 @@
 ---
 import HTML from '../../layouts/HTML.astro';
+import supabase from '../../../lib/supabaseClient';
 
 const { cookies, redirect } = Astro;
 
@@ -9,13 +10,15 @@ const refreshToken = cookies.get('sb-refresh-token');
 if (accessToken && refreshToken) {
   return redirect('/admin');
 }
+const s = await supabase.auth.getSession();
+console.log(s);
 ---
 
 <HTML>
   <div class="container mx-auto max-w-5xl my-20">
     <h1>Sign In</h1>
     <p>New here? <a href="/admin/register">Create an account</a></p>
-    <form action="/api/signin" method="post">
+    <form action="/api/auth/signin" method="post">
       <label>
         Email
         <input type="email" name="email" placeholder="Email" />

@@ -5,7 +5,7 @@ declare global {
 }
 
 const url =
-  (import.meta.env.DEV ? 'http://localhost:8888/' : import.meta.env.SITE) +
+  (import.meta.env.DEV ? 'http://localhost:4321/' : import.meta.env.SITE) +
   'api/graphql';
 
 export const isClient = import.meta.env.SSR === false;

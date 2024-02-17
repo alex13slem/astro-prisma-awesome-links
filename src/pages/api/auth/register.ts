@@ -1,10 +1,7 @@
-import type { EdgeFunction } from '@netlify/edge-functions';
-import { supabase } from '../../src/lib/supabaseClient';
+import type { APIRoute } from 'astro';
+import supabase from '../../../../lib/supabaseClient';
 
-const handler: EdgeFunction = async (request, ctx) => {
-  if (request.method !== 'POST') {
-    return new Response('Method not allowed', { status: 405 });
-  }
+export const POST: APIRoute = async ({ request, redirect }) => {
   const formData = await request.formData();
   const email = formData.get('email')?.toString();
   const password = formData.get('password')?.toString();
@@ -22,9 +19,5 @@ const handler: EdgeFunction = async (request, ctx) => {
     return new Response(error.message, { status: 500 });
   }
 
-  const url = new URL('/admin/signin', request.url);
-
-  return Response.redirect(url);
+  return redirect('/signin');
 };
-
-export default handler;
