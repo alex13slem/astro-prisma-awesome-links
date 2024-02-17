@@ -27,7 +27,6 @@ const handler: EdgeFunction = async (request, ctx) => {
   ctx.cookies.set('sb-refresh-token', refresh_token);
 
   const url = new URL('/admin', request.url);
-  console.log(url);
 
   return Response.redirect(url);
   // return new Response('Success');

@@ -11,7 +11,6 @@ if (accessToken && refreshToken) {
   return redirect('/admin');
 }
 const s = await supabase.auth.getSession();
-console.log(s);
 ---
 
 <HTML>

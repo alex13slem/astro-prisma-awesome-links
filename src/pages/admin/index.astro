@@ -1,38 +1,45 @@
 ---
 import HTML from '../../layouts/HTML.astro';
 import supabase from '../../../lib/supabaseClient';
+import type { Session, User } from '@supabase/supabase-js';
 
 const { cookies, redirect } = Astro;
 
-const accessToken = cookies.get('sb-access-token');
-const refreshToken = cookies.get('sb-refresh-token');
+let responseData: { user: User | null; session: Session | null } = {
+  session: null,
+  user: null,
+};
 
-if (!accessToken || !refreshToken) {
-  return redirect('/admin/signin');
+if (!import.meta.env.DEV) {
+  const accessToken = cookies.get('sb-access-token');
+  const refreshToken = cookies.get('sb-refresh-token');
+
+  if (!accessToken || !refreshToken) {
+    return redirect('/admin/signin');
+  }
+  supabase.auth
+    .setSession({
+      refresh_token: refreshToken.value,
+      access_token: accessToken.value,
+    })
+    .then(({ data, error }) => {
+      responseData = data;
+      if (error) {
+        cookies.delete('sb-access-token', {
+          path: '/',
+        });
+        cookies.delete('sb-refresh-token', {
+          path: '/',
+        });
+
+        return redirect('/admin/signin');
+      }
+    });
 }
-
-const { data, error } = await supabase.auth.setSession({
-  refresh_token: refreshToken.value,
-  access_token: accessToken.value,
-});
-
-if (error) {
-  cookies.delete('sb-access-token', {
-    path: '/',
-  });
-  cookies.delete('sb-refresh-token', {
-    path: '/',
-  });
-
-  return redirect('/admin/signin');
-}
-
-const email = data?.user?.email;
 ---
 
 <HTML>
   <div class="container mx-auto max-w-5xl my-20">
-    <h1>Welcome {email}</h1>
     <p>We are happy to see you here</p>
     <form action="/api/auth/signout">
       <button type="submit">Sign out</button>
