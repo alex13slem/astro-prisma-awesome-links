@@ -1,5 +1,10 @@
 ---
 import HTML from '../../layouts/HTML.astro';
+const { redirect } = Astro;
+
+if (!import.meta.env.DEV) {
+  redirect('/admin');
+}
 ---
 
 <HTML>
