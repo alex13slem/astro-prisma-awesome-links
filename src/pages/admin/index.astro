@@ -2,6 +2,7 @@
 import HTML from '../../layouts/HTML.astro';
 import supabase from '../../../lib/supabaseClient';
 import type { Session, User } from '@supabase/supabase-js';
+import AdminLinks from '../../components/AdminLinks.svelte';
 
 const { cookies, redirect } = Astro;
 
@@ -40,9 +41,6 @@ if (!import.meta.env.DEV) {
 
 <HTML>
   <div class="container mx-auto max-w-5xl my-20">
-    <p>We are happy to see you here</p>
-    <form action="/api/auth/signout">
-      <button type="submit">Sign out</button>
-    </form>
+    <AdminLinks client:load />
   </div>
 </HTML>
