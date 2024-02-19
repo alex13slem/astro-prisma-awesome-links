@@ -1,5 +1,5 @@
 import type { EdgeFunction } from '@netlify/edge-functions';
-import supabase from '../lib/supabaseClient';
+// import supabase from '../src/lib/supabaseClient';
 
 const handler: EdgeFunction = async (request, ctx) => {
   if (request.method !== 'POST') {
@@ -13,10 +13,10 @@ const handler: EdgeFunction = async (request, ctx) => {
     return new Response('Email and password are required', { status: 400 });
   }
 
-  const { error } = await supabase.auth.signUp({
+  const { error } = await supabase?.auth.signUp({
     email,
     password,
-  });
+  })!;
 
   if (error) {
     return new Response(error.message, { status: 500 });

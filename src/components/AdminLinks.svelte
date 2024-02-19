@@ -1,10 +1,10 @@
 <script lang="ts">
   import { gql } from '@urql/core';
-  import urqlClient from '../../lib/urqlClient';
+  import urqlClient from '../lib/urqlClient';
   import type { Page } from '../types/graphql';
   import type { Link } from '@prisma/client';
   import { onMount } from 'svelte';
-  import prisma from '../../lib/prismaClient';
+  import prisma from '../lib/prismaClient';
 
   const AllLinksQuery = gql`
     query allLinksQuery($first: Int, $after: ID) {
